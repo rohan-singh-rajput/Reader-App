@@ -1,4 +1,4 @@
-package com.rohan.areader.presentation.navigation.screens
+package com.rohan.areader.presentation.navigation.screens.login
 
 
 import androidx.compose.foundation.background
@@ -30,7 +30,6 @@ import com.rohan.areader.presentation.components.EmailInput
 import com.rohan.areader.presentation.components.PasswordInput
 import com.rohan.areader.presentation.components.ReaderLogo
 import com.rohan.areader.presentation.navigation.ReaderScreens
-import com.rohan.areader.presentation.navigation.screens.login.LoginScreenViewModel
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -41,9 +40,11 @@ fun ReaderLoginScreen(
 ) {
     val showLoginForm = rememberSaveable { mutableStateOf(true) }
 
-    Surface(modifier = Modifier
-        .fillMaxSize()
-        .padding(5.dp)) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp)
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
@@ -53,37 +54,43 @@ fun ReaderLoginScreen(
                 loading = false,
                 isCreateAccount = false
             ) { email, password ->
-                loginScreenViewModel.signInWithEmailAndPassword(email, password)
-                navController.navigate(ReaderScreens.ReaderHomeScreen.name)
+                loginScreenViewModel.signInWithEmailAndPassword(email, password) {
+                    navController.navigate(ReaderScreens.ReaderHomeScreen.name)
+                }
 
             }
             else {
                 UserForm(loading = false, isCreateAccount = true) { email, password ->
-                    loginScreenViewModel.createUserWithEmailAndPassword(email,password)
+                    loginScreenViewModel.createUserWithEmailAndPassword(email, password)
                     navController.navigate(ReaderScreens.ReaderHomeScreen.name)
                 }
             }
 
-        }
-        Spacer(modifier = Modifier.height(15.dp))
-        Row(
-            modifier = Modifier.padding(15.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val text = if (showLoginForm.value) "Sign up" else "Login"
-            Text(text = "New User?")
-            Text(text,
-                modifier = Modifier
-                    .clickable {
-                        showLoginForm.value = !showLoginForm.value
+            Spacer(modifier = Modifier.height(8.dp))
 
-                    }
-                    .padding(start = 5.dp),
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.secondary)
+            Row(
+                modifier = Modifier.padding(5.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val text = if (showLoginForm.value) "Sign up" else "Login"
+                val newUserText = if (showLoginForm.value) "New User?" else "Already A User?"
+                Text(text = newUserText)
+                Text(text,
+                    modifier = Modifier
+                        .clickable {
+                            showLoginForm.value = !showLoginForm.value
+
+                        }
+                        .padding(start = 5.dp),
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.secondary)
+
+            }
 
         }
+//
+
 
     }
 
@@ -107,7 +114,7 @@ fun UserForm(
     }
 
     val modifier = Modifier
-        .height(250.dp)
+        .height(400.dp)
         .background(MaterialTheme.colorScheme.background)
         .verticalScroll(rememberScrollState())
 
@@ -118,7 +125,10 @@ fun UserForm(
         if (isCreateAccount) Text(
             text = stringResource(id = R.string.create_acct),
             modifier = Modifier.padding(4.dp)
-        ) else Text("")
+        ) else Text(
+            " ",
+            modifier = Modifier.padding(4.dp)
+        )
         EmailInput(
             emailState = email, enabled = !loading,
             onAction = KeyboardActions {
@@ -158,12 +168,12 @@ fun SubmitButton(
         onClick = onClick,
         modifier = Modifier
             .padding(6.dp)
-            .fillMaxWidth(80f),
+            .fillMaxWidth(),
         enabled = !loading && validInputs,
         shape = CircleShape
     ) {
         if (loading) CircularProgressIndicator(modifier = Modifier.size(25.dp))
-        else Text(text = textId, modifier = Modifier.padding(5.dp))
+        else Text(text = textId, modifier = Modifier.padding(8.dp))
     }
 
 }

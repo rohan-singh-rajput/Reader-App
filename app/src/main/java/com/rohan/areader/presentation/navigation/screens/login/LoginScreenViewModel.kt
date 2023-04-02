@@ -34,12 +34,13 @@ class LoginScreenViewModel : ViewModel() {
     }
 
 
-    fun signInWithEmailAndPassword(email: String, password: String) = viewModelScope.launch {
+    fun signInWithEmailAndPassword(email: String, password: String, home: () -> Unit) = viewModelScope.launch {
         try {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d("Sign in", "Signed IN ")
+                        home()
                     } else {
                         Log.d("sign in", "signInWithEmailAndPassword: ${task.result.toString()}")
                     }

@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rohan.areader.presentation.navigation.screens.ReaderHomeScreen
-import com.rohan.areader.presentation.navigation.screens.ReaderLoginScreen
+import com.rohan.areader.presentation.navigation.screens.login.ReaderLoginScreen
 import com.rohan.areader.presentation.navigation.screens.ReaderSplashScreen
 
 
