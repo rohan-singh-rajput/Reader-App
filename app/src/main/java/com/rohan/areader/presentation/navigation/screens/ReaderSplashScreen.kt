@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.rohan.areader.presentation.components.ReaderLogo
 import com.rohan.areader.presentation.navigation.ReaderScreens
 import com.rohan.areader.ui.theme.poppins
@@ -43,7 +44,12 @@ fun ReaderSplashScreen(navController: NavController = NavController(context = Lo
             })
         )
         delay(1000L)
-        navController.navigate(ReaderScreens.LoginScreen.name)
+
+        if (FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()) {
+            navController.navigate(ReaderScreens.LoginScreen.name)
+        } else {
+            navController.navigate(ReaderScreens.ReaderHomeScreen.name)
+        }
     }
 
     Surface(
