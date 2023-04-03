@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">AReader</string>
     <string name="create_acct">Sign Up</string>
+    <string name="reader">Reader</string>
 </resources>
