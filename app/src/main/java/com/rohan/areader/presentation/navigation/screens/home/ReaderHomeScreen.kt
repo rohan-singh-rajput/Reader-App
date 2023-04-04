@@ -1,10 +1,9 @@
 package com.rohan.areader.presentation.navigation.screens.home
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
@@ -15,8 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -28,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
-import com.rohan.areader.R
 import com.rohan.areader.data.remote.book_data.MBook
 import com.rohan.areader.presentation.components.BookCard
 import com.rohan.areader.presentation.components.ListCard
@@ -129,6 +125,14 @@ fun FABContent(onTap: () -> Unit) {
 
 @Composable
 fun HomeContent(navController: NavController) {
+
+    val listOfBooks = listOf<MBook>(
+        MBook(id = "dadfa", title = "Hello Again", authors = "All of us", notes = null),
+        MBook(id = "dadfa", title = " Again", authors = "All of us", notes = null),
+        MBook(id = "dadfa", title = "Hello ", authors = "The world us", notes = null),
+        MBook(id = "dadfa", title = "Hello Again", authors = "All of us", notes = null),
+        MBook(id = "dadfa", title = "Hello Again", authors = "All of us", notes = null)
+    )
     val emailOfUser = !FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
     val currentUserName = if (emailOfUser)
         FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
@@ -166,13 +170,42 @@ fun HomeContent(navController: NavController) {
                 )
 
             }
-//
-
-
         }
 
         ReadingRightNowArea(books = listOf(), navController = navController)
 
+        TitleSection(label = "Reading List")
+
+        BookListArea(listOfBooks = listOfBooks, navController = navController)
+
+
+    }
+
+}
+
+@Composable
+fun BookListArea(listOfBooks: List<MBook>, navController: NavController) {
+    HorizontalScrollableComponent(listOfBooks) {
+        //TODO() - on card click goto details
+
+    }
+
+}
+
+@Composable
+fun HorizontalScrollableComponent(listOfBooks: List<MBook>, onCardPressed: (String) -> Unit) {
+    val scrollState = rememberScrollState()
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(280.dp)
+            .horizontalScroll(scrollState)
+    ) {
+        for (book in listOfBooks) {
+            ListCard(book = book) {
+                onCardPressed(it)
+            }
+        }
 
     }
 
@@ -182,7 +215,14 @@ fun HomeContent(navController: NavController) {
 fun ReadingRightNowArea(books: List<MBook>, navController: NavController) {
     Row(modifier = Modifier.padding(4.dp)) {
         ListCard()
-        
+        BookCard(
+            title = "Kotlin In Action",
+            author = "Rohan Singh",
+            rating = 4.5f,
+            isReading = true,
+            isFavorite = false
+        )
+
     }
 
 }
@@ -232,4 +272,6 @@ fun RoundedButton(label: String = "Reading", radius: Int = 29, onPress: () -> Un
     }
 
 }
+
+
 
