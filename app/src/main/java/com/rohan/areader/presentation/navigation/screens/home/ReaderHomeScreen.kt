@@ -85,7 +85,6 @@ fun ReaderHomeScreen(navController: NavController) {
                         )
                     }
                 },
-
                 )
         },
         content = { innerPadding ->
@@ -99,7 +98,7 @@ fun ReaderHomeScreen(navController: NavController) {
         },
         floatingActionButton = {
             FABContent {
-
+                navController.navigate(ReaderScreens.SearchScreen.name)
             }
 
         }
@@ -110,7 +109,7 @@ fun ReaderHomeScreen(navController: NavController) {
 @Composable
 fun FABContent(onTap: () -> Unit) {
     FloatingActionButton(
-        onClick = { onTap },
+        onClick = { onTap() },
         shape = RoundedCornerShape(70),
         containerColor = MaterialTheme.colorScheme.primary
     ) {
